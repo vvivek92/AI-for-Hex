@@ -10,7 +10,7 @@
 #include"game.hpp"
 #include<cstdlib>
 #include<ctime>
-#include<windows.h>
+//#include<windows.h>
 #include "GraphAdjListCompMoves.hpp"
 
 

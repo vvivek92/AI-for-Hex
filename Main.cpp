@@ -2,8 +2,8 @@
 //Main.cpp
 #include<iostream>
 #include"game.hpp"
-#include<cassert>
-#include "color.hpp"
+#include<string>
+#include <sstream>
 using namespace std;
 
 inline void delimiter(const char& c) {
@@ -22,34 +22,46 @@ inline void printInfo() {
 	delimiter('*');
 }
 int main() {
-    int sevenOrEleven;
-	bool playerIsHuman;
-	char yOrn;
+    int board_w=0;
+    bool playerIsHuman;
+    string s;
+    int temp;
     cout<< "Application start..."<<endl;
-	
-	delimiter('-');
-	
-	cout<<"Enter the number of hexes on one side:";
-    cin>>sevenOrEleven;
+    delimiter('-');
+    do {
+           cout<<"Enter the width of hex board(legal values 7 or 11) :";
+           getline(cin,s);
+           stringstream ss(s);
+           ss>>board_w;
+           temp=ss.fail();
+    } while(temp==1 || !(board_w==7 || board_w==11) );     
+ 
 	//assert(sevenOrEleven==7 || sevenOrEleven==11);
-	cout<<"Playing with "<<sevenOrEleven<<"X"<<sevenOrEleven<<" board"<<endl;
+    cout<<"Playing with "<<board_w<<"X"<<board_w<<" board"<<endl;
 	
-	delimiter('-');
+    delimiter('-');
 	
-	cout<<"Human, do you want to go first(press Y to go first)";
-	cin>>yOrn;
-	
-	if(yOrn=='Y' || yOrn=='y')
-	    playerIsHuman=true;
-	else
-	    playerIsHuman=false;
+    do {
+           cout<<"Human, do you want to go first(yes/no)";
+           getline(cin,s);
+           stringstream ss(s);
+           string::size_type i;
+           if((i=s.find(' ')) != string::npos ) {
+               s.erase(i);       
+           }
+    } while(s.compare("y")&&s.compare("Y")&&s.compare("yes")&&s.compare("n")&&s.compare("N")&&s.compare("no"));     
+ 
+    if(s.compare("y")==0 || s.compare("Y")==0 ||  s.compare("yes")==0)
+        playerIsHuman=true;
+    else
+        playerIsHuman=false;
 	
 	if(playerIsHuman) cout<<"Human makes the first move"<<endl;
 	else cout<<"Computer makes the first move"<<endl;
 	printInfo();
 	
 	
-	Game G(sevenOrEleven, playerIsHuman);
+	Game G(board_w, playerIsHuman);
 	G.run();
 	
 	
