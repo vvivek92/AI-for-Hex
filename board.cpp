@@ -12,30 +12,13 @@ using namespace std;
 #include<cstring>
 
 
-Board::Board(const Board& b):sevenOrEleven(b.sevenOrEleven) {
-    board=(char**)malloc(sevenOrEleven*sizeof(char*));
-    for(int i=0;i < sevenOrEleven;i++) {
-        board[i]=(char*)malloc(sevenOrEleven*sizeof(char));   
-	}
-    for(int i=0; i < sevenOrEleven;i++)
-        for(int j=0; j < sevenOrEleven;j++)
-            board[i][j]=b.board[i][j];		
+Board::Board(const Board& b):board_w(b.board_w),board(b.board) {
 }
 
 Board::~Board() {
-    for(int i=0;i<sevenOrEleven;i++)
-	    free( board[i]);
-	free(board);
 }
 
-Board::Board(int n):sevenOrEleven(n) {
-    board=(char**)malloc(n*sizeof(char*));
-    for(int i=0;i < n;i++) {
-        board[i]=(char*)malloc(n*sizeof(char));   
-	}
-    for(int k=0;k<n;k++)
-        for(int j=0;j<n;j++)
-            board[k][j]='.';		
+Board::Board(int n):board_w(n),board(n,vector<char>(n,'.')) {
 }
 void Board::printBoard() {
 	char c='A';
@@ -43,16 +26,16 @@ void Board::printBoard() {
     int tab=0;
 	cout<<endl;
 	cout<<"Board:"<<endl<<endl;
-	for(unsigned int i=0;i<sevenOrEleven;i++) {
+	for(unsigned int i=0;i<board_w;i++) {
 	    cout<<"  "<<c++<<"  ";
 	}
 	cout<<endl<<endl;
-	for(int j=0; j<sevenOrEleven; j++) {
+	for(int j=0; j<board_w; j++) {
 	    for(int i=0;i != tab;i++) {
             cout<<"  ";
         }
         cout<<num<<"  ";				
-	    for( int k = 0; k< sevenOrEleven;k++) {
+	    for( int k = 0; k< board_w;k++) {
 		    cout<<"  "<<board[j][k]<<"  ";
 		}
 		cout<<num++<<"  ";
@@ -64,99 +47,42 @@ void Board::printBoard() {
     }
 	cout<<"  ";
 	c='A';
-	for(int i=0;i<sevenOrEleven;i++) {
+	for(int i=0;i<board_w;i++) {
 	    cout<<"  "<<c++<<"  ";
 	}
 	cout<<endl;	
 }
-bool Board::set( int & row, int & col) {
-    board[row][col]='O';
-}	
-
-bool Board::setX(int & rowArg, int & colArg) {
-    board[rowArg][colArg]='X';
+bool Board::set(const int & rowArg,const int & colArg,const char & c) {
+    board[rowArg][colArg]=c;
     return true;
 }
-bool Board::set(string inputString, string player, int & rowArg, int & colArg) {
-////get first word and first integer from a stream
-    int row, col;
+
+bool Board::processString(string & inputString, int & row, int & col) {
     istringstream iss(inputString);
     string sub;
     iss >> sub;
-//cout << "hi"<<sub.size()<<endl;
-	if(sevenOrEleven==11) {
-        if(sub.size()==1) {
-		    if(sub[0] < 'A' || sub[0] > 'K')
-		        return false;
-		    col=(sub[0]-'A');
-		    cout << "hi"<<endl;
-		    iss >> sub;
-		    if(sub.size()==1) {
-			    row=(sub[0]-'0'-1);
-				if(row>=sevenOrEleven) return false;
-			}
-			else if(sub.compare("11")==0)
-			    row=10;
-			else if(sub.compare("10")==0)
-			    row=9;
-			else
-			    return false;
-		}
-		
-		else {
-		    if(sub[0] < 'A' || sub[0] > 'K')
-		        return false;
-		    col=(sub[0]-'A');
-		        sub.erase(0,1);
-			    if(sub.size()==1) {
-				    row=(sub[0]-'0'-1);
-					if(row>=sevenOrEleven) return false;
-				}
-				else if(sub.compare("11")==0)
-				    row=10;
-				else if(sub.compare("10")==0)
-				    row=9;
-				else
-				    return false;
-		    }
-		}
-		else {
-		    if(sub.size()==1) {
-		        if(sub[0] < 'A' || sub[0] > 'G')
-		            return false;
-		        col=(sub[0]-'A');
-			
-			    iss >> sub;
-			    if(sub.size()==1) {
-				    row=(sub[0]-'0'-1);
-				    if(row>=sevenOrEleven) return false;
-				}
-				else return false;
-		    }
-		
-		    else {
-		        if(sub[0] < 'A' || sub[0] > 'G')
-		            return false;
-			    col=(sub[0]-'A');
-		        sub.erase(0,1);
-			    if(sub.size()==1) {
-				    row=(sub[0]-'0'-1);
-				    if(row>=sevenOrEleven) return false;
-				}
-				else return false;
-		    }			    
-		}
-		//cout<<col<<" "<<row<<endl;
-		if(board[row][col]=='.' ) {
-		    rowArg=row;
-			colArg=col;
-            if(player.compare("Human")==0)board[row][col]='X';
-			else if(player.compare("Computer")==0)board[row][col]='O';
-			return true;
-	}
-    else return false;						
 }
-char Board::getValue(int row, int col) {
-    assert(row >=0 && col >=0 && row < sevenOrEleven && col < sevenOrEleven);
+bool Board::set(string inputString, string player, int & rowArg, int & colArg) {
+////get first word and first integer from a stream
+    char c;
+    int i;
+    istringstream iss(inputString);
+    iss >> c;
+    if(iss.fail()) return false;
+    iss >> i;
+    if(iss.fail()) return false;
+    if(i<1 && i > board_w ) return false;
+    if((c>='a' && c <='a'+board_w-1)) {
+        colArg=c-'a';
+    }
+    else if (c>='A' && c <='A'+board_w-1) {
+        colArg=c-'A';            
+    }
+    else return false;
+    rowArg=i-1;
+    return true;
+}    
+const char & Board::getValue(const int & row,const int & col) {              
+    assert(row >=0 && col >=0 && row < board_w && col < board_w);
     return board[row][col];    
 }

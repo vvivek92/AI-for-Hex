@@ -50,7 +50,7 @@ using namespace std;
 			bool setSuccess;
 			cout<<"Play your move, Human (eg: A3 or A 3):";cin.sync();
 			getline(cin,inputHuman);
-			setSuccess=B.set(inputHuman,"Human",row, col);
+			setSuccess=B.processString(inputHuman,"Human",row, col);
 			
 			if(!setSuccess)cout<<endl<<"Illegal move"<<endl;
 			else {
@@ -90,7 +90,7 @@ using namespace std;
 				numWins=0;
 				//numLost=0;
                 indexToRowCol(row,col,*itr);
-			    b->set(row,col);
+			    b->set(row,col,'O');
 			    if(row-1>=0)seeNeighboursDummy(row-1,col,row,col);
 			    if(row+1<sevenOrEleven)seeNeighboursDummy(row+1,col,row,col);
 			    if(col-1>=0)seeNeighboursDummy(row,col-1,row,col);
@@ -118,7 +118,7 @@ using namespace std;
 			*/
 					for(tempItr=tempV.begin()+1;tempItr<tempV.end();tempItr+=2) {
 						    indexToRowCol(row,col,*tempItr);
-							bb->set(row,col);
+							bb->set(row,col,'O');
 							if(row-1>=0)seeNeighboursDummyIn(row-1,col,row,col);
 			                if(row+1<sevenOrEleven)seeNeighboursDummyIn(row+1,col,row,col);
 			                if(col-1>=0)seeNeighboursDummyIn(row,col-1,row,col);
@@ -146,7 +146,7 @@ using namespace std;
 			swap(*itr,v.back());
 			v.pop_back();
 			indexToRowCol(row,col,bestVertexForMove);
-			B.set(row,col);
+			B.set(row,col,'O');
 			cout<<endl;
 			//for(itr=v.begin();itr!=v.end();itr++)
 			//    cout<<*itr;
