@@ -31,7 +31,7 @@ class Game {
 	std::unique_ptr<GraphAdjList<char> > g;
 	*/
         std::unique_ptr<GraphAdt<char> >edgeColor;
-	std::unique_ptr<GraphAdjListCompMoves<char> >  tempCompMoves, tempCompMovesIn, ;
+	std::unique_ptr<GraphAdjListCompMoves<char> >  tempCompMoves, tempCompMovesIn ;
 	std::unique_ptr<Board >  b,bb;
         vector<int> v;
 		
