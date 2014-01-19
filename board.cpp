@@ -57,13 +57,7 @@ bool Board::set(const int & rowArg,const int & colArg,const char & c) {
     return true;
 }
 
-bool Board::processString(string & inputString, int & row, int & col) {
-    istringstream iss(inputString);
-    string sub;
-    iss >> sub;
-}
-bool Board::set(string inputString, string player, int & rowArg, int & colArg) {
-////get first word and first integer from a stream
+bool Board::processString(string & inputString, int & rowArg, int & colArg) {
     char c;
     int i;
     istringstream iss(inputString);

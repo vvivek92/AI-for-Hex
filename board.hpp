@@ -15,7 +15,7 @@ using namespace std;
 
 class Board {
     private:
-        vector<vector<char>> board;              //2D vector to represent board
+        vector<vector<char> > board;              //2D vector to represent board
 	const int board_w;                  //size of board
     public:
         Board(const Board& b);

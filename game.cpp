@@ -50,10 +50,11 @@ using namespace std;
 			bool setSuccess;
 			cout<<"Play your move, Human (eg: A3 or A 3):";cin.sync();
 			getline(cin,inputHuman);
-			setSuccess=B.processString(inputHuman,"Human",row, col);
-			
+			setSuccess=B.processString(inputHuman,row, col);
+                        if(B.getValue(row,col)=='X'||B.getValue(row,col)=='O') setSuccess=false; 
 			if(!setSuccess)cout<<endl<<"Illegal move"<<endl;
 			else {
+			    B.set(row,col,'X');
 			    itr=find(v.begin(), v.end(), rowColToIndex(row,col) );
 			    swap(*itr,v.back());
 			    v.pop_back();
