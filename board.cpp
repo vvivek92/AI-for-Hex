@@ -62,7 +62,7 @@ bool Board::processString(string & inputString, int & rowArg, int & colArg) {
     int i;
     istringstream iss(inputString);
     iss >> c;
-    if(iss.fail()) return false;
+    if( iss.fail()) return false;
     iss >> i;
     if(iss.fail()) return false;
     if(i<1 && i > board_w ) return false;
