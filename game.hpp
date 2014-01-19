@@ -6,6 +6,7 @@
 #include "board.hpp"
 #include<algorithm>
 #include<string>
+#include<memory>
 #include "GraphAdjList.hpp"
 using namespace std;
 #include"GraphAdt.hpp"
@@ -21,12 +22,18 @@ class Game {
         bool gameIsOver;
 	bool legal;
 	bool playerIsHuman;
+        GraphAdjListCompMoves<char> permCompMoves;
 	const int sevenOrEleven;
-	GraphAdt<char> * edgeColor;
-	GraphAdjListCompMoves<char> * tempCompMoves,* tempCompMovesIn, permCompMoves;
-	Board * b,*bb;
-	GraphAdjList<char> * g;
-	vector<int> v;
+        /*
+        std::unique_ptr<GraphAdt<char> > edgeColor;
+	std::unique_ptr<GraphAdjListCompMoves<char>  tempCompMoves, tempCompMovesIn, ;
+	std::unique_ptr<Board>  b,bb;
+	std::unique_ptr<GraphAdjList<char> > g;
+	*/
+        std::unique_ptr<GraphAdt<char> >edgeColor;
+	std::unique_ptr<GraphAdjListCompMoves<char> >  tempCompMoves, tempCompMovesIn, ;
+	std::unique_ptr<Board >  b,bb;
+        vector<int> v;
 		
     public:
 	void run(); 

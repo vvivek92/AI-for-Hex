@@ -12,7 +12,7 @@
 #include<ctime>
 //#include<windows.h>
 #include "GraphAdjListCompMoves.hpp"
-
+#include<memory>
 
 using namespace std;
 void Game::run() {
@@ -69,8 +69,8 @@ bool Game::computerMove() {
     int maxWins= 0;
     int j=0;
     for(itr=v.begin(); itr!=v.end();itr++) {
-        b= new Board(B);
-	tempCompMoves= new GraphAdjListCompMoves<char>(permCompMoves);
+        b= std::unique_ptr<Board> ( new Board(B) );
+	tempCompMoves= std::unique_ptr<GraphAdjListCompMoves<char> >(new GraphAdjListCompMoves<char>(permCompMoves));
 	vector<int> tempV(v);
 	vector<int>::iterator tempItr;
 	swap(tempV[j],tempV.back());
@@ -86,8 +86,8 @@ bool Game::computerMove() {
 	if(row+1 < sevenOrEleven && col-1>=0)seeNeighboursDummy(row+1,col-1,row,col);
 	int a1,b1;
 	for(int i=0;i<1000;i++) {
-	    bb=new Board(*b);
-	    tempCompMovesIn=new GraphAdjListCompMoves<char>(*tempCompMoves);
+	    bb=std::unique_ptr<Board> (new Board(*b));
+	    tempCompMovesIn=std::unique_ptr<GraphAdjListCompMoves<char> >(new GraphAdjListCompMoves<char>(*tempCompMoves));
 	    random_shuffle(tempV.begin(), tempV.end());
 	    for(tempItr=tempV.begin()+1;tempItr<tempV.end();tempItr+=2) {
 	        indexToRowCol(row,col,*tempItr);
@@ -104,8 +104,6 @@ bool Game::computerMove() {
 	    if(tempCompMovesIn->isConnected(a1,b1)) {
                 numWins++;
 	    }
-            delete tempCompMovesIn;   				
-	    delete bb;
 	}
 	if(numWins>maxWins) {
             bestVertexForMove=*itr;
@@ -126,8 +124,6 @@ bool Game::computerMove() {
     if(col+1<sevenOrEleven)seeNeighbours('R',row,col+1,row,col);
     if(row-1>=0 && col+1<sevenOrEleven)seeNeighbours('R',row-1,col+1,row,col);
     if(row+1 < sevenOrEleven && col-1>=0)seeNeighbours('R',row+1,col-1,row,col);
-    delete b;
-    delete tempCompMoves;
     return true;
 }
 void Game::seeNeighbours(char C, int row, int col,int actualRow,int actualCol) {
@@ -159,8 +155,9 @@ void Game::printWinner(bool playerIsHuman) {
     B.printBoard();
 }
 			
-Game::Game(int num, bool b):sevenOrEleven(num),playerIsHuman(b),B(num),permCompMoves(num*num+4,'B') {
-    edgeColor= new GraphAdjList<char>(num*num+4,'N');
+   
+   
+Game::Game(int num, bool b):edgeColor(new GraphAdjList<char>(num*num+4,'N')),sevenOrEleven(num),playerIsHuman(b),B(num),permCompMoves(num*num+4,'B') {
     gameIsOver=false;
     legal=false;
     int n=sevenOrEleven;
@@ -188,7 +185,7 @@ inline int Game::rowColToIndex(int row,int col) {
     assert(row >=0 && col >=0 && row < sevenOrEleven && col < sevenOrEleven);
     return (row * sevenOrEleven + col);
 }
-Game::~Game() {delete edgeColor;}
+Game::~Game() {}
 inline void Game::indexToRowCol(int & row , int&  col, int index) {
     row= index/ sevenOrEleven;
     col= index % sevenOrEleven;
